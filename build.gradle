@@ -14,18 +14,11 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish' 
 apply plugin: 'eclipse'
 
-apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/secrets.gradle'
-apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/markdown-git-changelog.gradle'
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/minecraft/artifacts.gradle'
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/minecraft/maven_nomcp.gradle'
 
-import net.minecraftforge.gradle.common.task.SignJar
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
-
-if (project.hasProperty('secretFile')) {
-    loadSecrets(new File((String) findProperty('secretFile')))
-}
 
 version = "${mod_version}" + getBuildNumber()
 archivesBaseName = "${mod_name}-${minecraft_version}"
@@ -69,7 +62,7 @@ minecraft {
 
 dependencies {
 
-    minecraft "net.minecraftforge:forge:${forge_version}"
+    minecraft 'net.minecraftforge:forge:1.14.4-28.2.4'
 }
 
 jar {
@@ -117,31 +110,6 @@ processResources {
 		}
 		
 		println('Minified ' + jsonMinified + ' json files. Saved ' + jsonBytesSaved + ' bytes. Took ' + (System.currentTimeMillis() - jsonMinifyStart) + 'ms.')
-	}
-}
-
-task signJar(type: SignJar, dependsOn: jar) {
-
-    onlyIf {
-    
-        project.hasProperty('keyStore')
-    }
-    
-	if (project.hasProperty('keyStore')) {
-	
-	    project.logger.lifecycle('Signing jar ' + jar.archivePath.getName());
-	
-        keyStore = project.findProperty('keyStore')
-        alias = project.findProperty('keyStoreAlias')
-        storePass = project.findProperty('keyStorePass')
-        keyPass = project.findProperty('keyStoreKeyPass')
-        inputFile = jar.archivePath
-        outputFile = jar.archivePath
-	}
-	
-	else {
-	
-	    project.logger.lifecycle('Could not sign ' + jar.archivePath.getName() + '. No keyStore property could be found')
 	}
 }
 
