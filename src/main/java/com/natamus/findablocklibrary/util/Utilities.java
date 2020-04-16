@@ -1,4 +1,4 @@
-package com.natamus.findablocklibrary.events;
+package com.natamus.findablocklibrary.util;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -6,57 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.natamus.findablocklibrary.config.ConfigHandler;
-import com.natamus.findablocklibrary.util.Reference;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.spawner.AbstractSpawner;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.Event.Result;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber
-public class FabEvent {
+public class Utilities {
 	private static Map<World, List<BlockPos>> worldcampfires = new HashMap<World, List<BlockPos>>();
 	private static Map<World, Map<Date, BlockPos>> timeoutpositions = new HashMap<World, Map<Date, BlockPos>>();
 	
-	@SubscribeEvent
-	public void onEntityJoin(LivingSpawnEvent.CheckSpawn e) {
-		World world = e.getWorld().getWorld();
-		if (world.isRemote) {
-			return;
-		}
-		
-		Entity entity = e.getEntity();
-		
-		if (entity.getTags().contains(Reference.MOD_ID + ".checked" )) {
-			return;	
-		}
-		entity.addTag(Reference.MOD_ID + ".checked");
-		
-		if (ConfigHandler.GENERAL.preventMobSpawnerSpawns.get()) {
-			AbstractSpawner msbl = e.getSpawner();
-			if (msbl != null) {
-				return;
-			}
-		}
-		
-		if (!entity.getType().getClassification().equals(EntityClassification.MONSTER)) {
-			return;
-		}
-		
+	public static BlockPos getRequestedBlockAroundEntitySpawn(Block requestedblock, Integer radius, Double radiusmodifier, World world, Entity entity) {
 		List<Entity> passengers = entity.getPassengers();
-		
-		int r = ConfigHandler.GENERAL.preventHostilesRadius.get();
 		BlockPos epos = entity.getPosition();
 		
 		List<BlockPos> currentcampfires;
@@ -76,9 +38,7 @@ public class FabEvent {
 					continue;
 				}
 				
-				if (campfire.withinDistance(epos, r*ConfigHandler.GENERAL.burnHostilesRadiusModifier.get())) {
-					e.setResult(Result.DENY);
-					
+				if (campfire.withinDistance(epos, radius*radiusmodifier)) {
 					if (passengers.size() > 0) {
 						for (Entity passenger : passengers) {
 							passenger.remove();
@@ -86,7 +46,7 @@ public class FabEvent {
 					}
 					System.out.println("Campfire saved!");
 					removetodatescampfire = campfire.toImmutable();
-					break;
+					return campfire.toImmutable();
 				}
 			}
 			
@@ -123,9 +83,9 @@ public class FabEvent {
 						System.out.println(todate.toString() + " expired!!");
 						continue;
 					}
-					if (toepos.withinDistance(epos, r)) {
-						System.out.println("Timeout saved!");
-						return;
+					if (toepos.withinDistance(epos, radius*radiusmodifier)) {
+						System.out.println("Timeout shows entity nearby. time and resources saved!");
+						return null;
 					}
 				}
 			}
@@ -143,6 +103,7 @@ public class FabEvent {
 		System.out.println(currentcampfires);
 		System.out.println(timeouts);
 		
+		int r = radius;
 		for (int x = -r; x < r; x++) {
 			for (int y = -r; y < r; y++) {
 				for (int z = -r; z < r; z++) {
@@ -152,13 +113,12 @@ public class FabEvent {
 						currentcampfires.add(cpos.toImmutable());
 						worldcampfires.put(world, currentcampfires);
 						
-						e.setResult(Result.DENY);
 						if (passengers.size() > 0) {
 							for (Entity passenger : passengers) {
 								passenger.remove();
 							}
 						}
-						return;
+						return cpos.toImmutable();
 					}
 				}
 			}
@@ -166,5 +126,6 @@ public class FabEvent {
 		
 		timeouts.put(new Date(), epos.toImmutable());
 		timeoutpositions.put(world, timeouts);
+		return null;
 	}
 }
