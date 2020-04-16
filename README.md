@@ -1,7 +1,7 @@
 ```
 repositories {
 
-    maven { url 'https://maven.mcmoddev.com' }
+    maven { url 'https://' }
 }
 
 dependencies {
