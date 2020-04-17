@@ -1,3 +1,8 @@
+## The Find A Block Library assists in finding a specific block and keeping track of its location in a world efficiently.
+
+For a more detailed description of the library mod visit the [FAB Library Project Page](https://www.curseforge.com/minecraft/mc-mods/fab-library).\
+For more information on the public functions the mod adds, see the [Wiki](https://github.com/ricksouth/FAB-Library/wiki).
+
 # How to use the library in your project:
 ### 1. Add the following lines to your build.gradle file:
 
