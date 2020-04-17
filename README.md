@@ -8,7 +8,7 @@ For more information on the public functions the mod adds, see the [Wiki](https:
 
 repositories {\
     maven {\
-        url = "https://github.com/ricksouth/serilum-forge-maven/raw/maven/" \
+        url = "ht<span>tps://github</span>.com/ricksouth/serilum-forge-maven/raw/maven/" \
     }\
 }
 
