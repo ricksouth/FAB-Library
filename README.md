@@ -12,22 +12,18 @@ dependencies {\
     compileOnly fg.deobf("com.natamus.fablibrary:fablibrary:VERSION")\
 }
 
-
-
-
+<br/><br/>
 
 ### 2. Replace VERSION in the previous lines with mcversion-modversion, e.g. 1.14.4-1.0, or 1.15.2-1.0:
 dependencies {\
     runtimeOnly fg.deobf("com.natamus.fablibrary:fablibrary:1.15.2-1.0")
 
-
-
+<br/><br/>
 
 ### 3. After that refresh your workspace by entering the following command in your project folder:
 $ gradlew cleanEclipse eclipse --refresh-dependencies
 
-
-
+<br/><br/>
 
 ### 4. Add the following lines to the bottom of mods.toml in your META-INF folder:
 [[dependencies.YOURMODID]]\
@@ -37,8 +33,7 @@ $ gradlew cleanEclipse eclipse --refresh-dependencies
     ordering="NONE" \
     side="BOTH"
 
-
-
+<br/><br/>
 
 ### 5. When uploading the file to your mod project page on curseforge, make sure to select FAB Library as a dependent at the bottom:
 
