@@ -42,4 +42,4 @@ $ gradlew cleanEclipse eclipse --refresh-dependencies
 
 ### 5. When uploading the file to your mod project page on curseforge, make sure to select FAB Library as a dependent at the bottom:
 
-![project_dependent](https://i.imgur.com/6xS9SCK.png)
+[![project_dependent](https://i.imgur.com/6xS9SCK.png)](#)
