@@ -15,14 +15,17 @@ dependencies {\
 
 
 
+
 ### 2. Replace VERSION in the previous lines with mcversion-modversion, e.g. 1.14.4-1.0, or 1.15.2-1.0:
 dependencies {\
     runtimeOnly fg.deobf("com.natamus.fablibrary:fablibrary:1.15.2-1.0")
 
 
 
+
 ### 3. After that refresh your workspace by entering the following command in your project folder:
 $ gradlew cleanEclipse eclipse --refresh-dependencies
+
 
 
 
@@ -33,6 +36,7 @@ $ gradlew cleanEclipse eclipse --refresh-dependencies
     versionRange="[1.0,)" \
     ordering="NONE" \
     side="BOTH"
+
 
 
 
