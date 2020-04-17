@@ -1,5 +1,5 @@
 # How to use the library in your project:
-### 1. Add the following lines in your build.gradle file:
+### 1. Add the following lines to your build.gradle file:
 
 repositories {\
     maven {\
