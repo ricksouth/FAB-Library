@@ -30,7 +30,7 @@ $ gradlew cleanEclipse eclipse --refresh-dependencies
 
 <br/><br/>
 
-### 4. Add the following lines to the bottom of mods.toml in your META-INF folder:
+### 4. Add the following lines to the bottom of mods.toml in your META-INF folder, replace YOURMODID with your mod's id:
 [[dependencies.YOURMODID]]\
     modId="fablibrary" \
     mandatory=true \
