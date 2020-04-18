@@ -17,13 +17,7 @@ public class Utilities {
 	private static Map<World, Map<Date, BlockPos>> timeoutpositions = new HashMap<World, Map<Date, BlockPos>>();
 	
 	public static BlockPos getRequestedBlockAroundEntitySpawn(Block requestedblock, Integer radius, Double radiusmodifier, World world, Entity entity) {
-		Map<World,List<BlockPos>> worldblocks;
-		if (getMapFromBlock.containsKey(requestedblock)) {
-			worldblocks = getMapFromBlock.get(requestedblock);
-		}
-		else {
-			worldblocks = new HashMap<World, List<BlockPos>>();
-		}
+		Map<World,List<BlockPos>> worldblocks = getMap(requestedblock);
 		
 		List<Entity> passengers = entity.getPassengers();
 		BlockPos epos = entity.getPosition();
@@ -127,5 +121,41 @@ public class Utilities {
 		timeouts.put(new Date(), epos.toImmutable());
 		timeoutpositions.put(world, timeouts);
 		return null;
+	}
+	
+	public static BlockPos updatePlacedBlock(Block requestedblock, BlockPos bpos, World world) {
+		BlockState state = world.getBlockState(bpos);
+		if (state.getBlock().equals(requestedblock)) {
+			Map<World, List<BlockPos>> worldblocks = getMap(requestedblock);
+			
+			List<BlockPos> currentblocks;
+			if (worldblocks.containsKey(world)) {
+				currentblocks = worldblocks.get(world);
+			}
+			else {
+				currentblocks = new ArrayList<BlockPos>();
+			}
+			
+			if (!currentblocks.contains(bpos)) {
+				currentblocks.add(bpos);
+				worldblocks.put(world, currentblocks);
+				getMapFromBlock.put(requestedblock, worldblocks);
+			}
+			return bpos;
+		}
+		
+		return null;
+	}
+	
+	// Internal util functions
+	private static Map<World,List<BlockPos>> getMap(Block requestedblock) {
+		Map<World,List<BlockPos>> worldblocks;
+		if (getMapFromBlock.containsKey(requestedblock)) {
+			worldblocks = getMapFromBlock.get(requestedblock);
+		}
+		else {
+			worldblocks = new HashMap<World, List<BlockPos>>();
+		}
+		return worldblocks;
 	}
 }
