@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.natamus.findablocklibrary.config.ConfigHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -75,8 +77,8 @@ public class Utilities {
 							totoremove.add(todate);
 						}
 					}
-					long ms = (now.getTime()-todate.getTime())/1000;
-					if (ms > 20000) {
+					long ms = (now.getTime()-todate.getTime());
+					if (ms > ConfigHandler.GENERAL.blockCheckAroundEntitiesDelayMs.get()) {
 						totoremove.add(todate);
 						continue;
 					}
