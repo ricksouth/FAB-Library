@@ -1,9 +1,12 @@
 package com.natamus.findablocklibrary;
 
+import com.natamus.findablocklibrary.config.ConfigHandler;
 import com.natamus.findablocklibrary.util.Reference;
 
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -14,8 +17,11 @@ public class Main {
     public Main() {
         instance = this;
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();  	
+        ModLoadingContext modLoadingContext = ModLoadingContext.get();
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    	
         modEventBus.addListener(this::loadComplete);
+        modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHandler.spec);
     }
 	
     private void loadComplete(final FMLLoadCompleteEvent event) {
